@@ -1,0 +1,13 @@
+{
+    "name": "xtain/dbal-platform-ase",
+    "type": "project",
+    "description": "Doctrine DBAL platform and driver for ASE",
+    "autoload": {
+        "classmap": [ "src/" ]
+    },
+    "require": {
+        "php": ">=5.3.9",
+        "doctrine/dbal": "~2.6",
+        "xtain/dbal-driver-dblib": "~0.9"
+    }
+}
