@@ -211,14 +211,17 @@ class ASEPlatform extends AbstractPlatform
             Type::BIGINT => BigIntType::class,
             Type::DECIMAL => DecimalType::class,
             Type::DATETIME => DateTimeType::class,
-            Type::DATETIME_IMMUTABLE => DateTimeImmutableType::class,
             Type::DATETIMETZ => DateTimeTzType::class,
-            Type::DATETIMETZ_IMMUTABLE => DateTimeTzImmutableType::class,
             Type::DATE => DateType::class,
-            Type::DATE_IMMUTABLE => DateImmutableType::class,
             Type::TIME => TimeType::class,
-            Type::TIME_IMMUTABLE => TimeImmutableType::class
         );
+
+        if (defined(Type::class . '::DATETIME_IMMUTABLE')) {
+            $patchMap[Type::DATETIME_IMMUTABLE] = DateTimeImmutableType::class;
+            $patchMap[Type::DATETIMETZ_IMMUTABLE] = DateTimeTzImmutableType::class;
+            $patchMap[Type::DATE_IMMUTABLE] = DateImmutableType::class;
+            $patchMap[Type::TIME_IMMUTABLE] = TimeImmutableType::class;
+        }
 
         foreach ($patchMap as $name => $override) {
             $instance = Type::getType($name);

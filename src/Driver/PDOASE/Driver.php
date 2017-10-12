@@ -21,6 +21,7 @@ namespace Doctrine\DBAL\Driver\PDOASE;
 
 use Doctrine\DBAL\Driver\AbstractASEDriver;
 use Doctrine\DBAL\Platforms\ASEPlatform;
+use Doctrine\DBAL\Driver\AbstractDbLibDriver;
 
 /**
  * The PDO-based ASE driver.
@@ -45,7 +46,7 @@ class Driver extends AbstractASEDriver
         }
 
         $connection = new Connection(
-            $this->_constructPdoDsn($params),
+            AbstractDbLibDriver::constructPdoDsn($params, $driverOptions),
             $username,
             $password,
             $driverOptions
@@ -54,32 +55,6 @@ class Driver extends AbstractASEDriver
         $this->initializeConnection($connection);
 
         return $connection;
-    }
-
-    /**
-     * Constructs the ASE PDO DSN.
-     *
-     * @param array $params
-     *
-     * @return string The DSN.
-     */
-    private function _constructPdoDsn(array $params)
-    {
-        $dsn = 'dblib:host=';
-
-        if (isset($params['host'])) {
-            $dsn .= $params['host'];
-        }
-
-        if (isset($params['port']) && !empty($params['port'])) {
-            $dsn .= ':' . $params['port'];
-        }
-
-        if (isset($params['dbname'])) {
-            $dsn .= ';dbname=' .  $params['dbname'];
-        }
-
-        return $dsn;
     }
 
     /**
