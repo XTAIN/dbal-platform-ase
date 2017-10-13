@@ -65,7 +65,7 @@ class Connection extends PDOConnection implements \Doctrine\DBAL\Driver\Connecti
      */
     public function query()
     {
-        return AbstractDbLibDriver::emulateQuery($this, func_get_args()),
+        return AbstractDbLibDriver::emulateQuery($this, func_get_args());
     }
 
     /**
