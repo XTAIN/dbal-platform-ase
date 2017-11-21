@@ -25,7 +25,7 @@ use Doctrine\DBAL\DBALException;
  * ASE exception.
  *
  * @since 2.6
- * @author Maximilian Ruta <Maximilian.Ruta@partner.commerzbank.com>
+ * @author Maximilian Ruta <mr@xtain.net>
  */
 class ASEException extends DBALException
 {

@@ -27,7 +27,7 @@ use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
  * ASE message handling implementation.
  *
  * @since 2.6
- * @author Maximilian Ruta <Maximilian.Ruta@partner.commerzbank.com>
+ * @author Maximilian Ruta <mr@xtain.net>
  */
 class ASEDriverException extends ASEException implements DriverException
 {

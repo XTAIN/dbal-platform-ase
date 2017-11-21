@@ -8,6 +8,6 @@
     "require": {
         "php": ">=5.3.9",
         "doctrine/dbal": "~2.5",
-        "xtain/dbal-driver-dblib": "~0.9.3"
+        "xtain/dbal-driver-dblib": "~0.9"
     }
 }

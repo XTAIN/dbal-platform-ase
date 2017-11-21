@@ -52,7 +52,7 @@ use Doctrine\DBAL\Types\Type;
  * ASE database platform.
  *
  * @since 2.6
- * @author Maximilian Ruta <Maximilian.Ruta@partner.commerzbank.com>
+ * @author Maximilian Ruta <mr@xtain.net>
  */
 class ASEPlatform extends AbstractPlatform
 {

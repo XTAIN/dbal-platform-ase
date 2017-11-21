@@ -27,7 +27,11 @@ use Doctrine\DBAL\Types\DateTimeTzType as DateTimeTzTypeParent;
 
 /**
  * {@inheritdoc}
- */
+ *
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ * @author  Maximilian Ruta <mr@xtain.net>
+ * @since   2.6
+*/
 class DateTimeTzType extends DateTimeTzTypeParent implements PatchedType
 {
     /**

@@ -28,7 +28,7 @@ use Doctrine\DBAL\Platforms\ASEPlatform;
  * ASE Connection implementation.
  *
  * @since 2.6
- * @author Maximilian Ruta <Maximilian.Ruta@partner.commerzbank.com>
+ * @author Maximilian Ruta <mr@xtain.net>
  */
 class ASEConnection implements Connection, ServerInfoAwareConnection
 {
@@ -118,7 +118,7 @@ class ASEConnection implements Connection, ServerInfoAwareConnection
         if (isset($driverOptions['charset'])) {
             $charset = $driverOptions['charset'];
         }
-        $this->charset = $charset;
+        $this->charset = strtolower(str_replace('-', '', $charset));
 
         if (!isset($driverOptions['dbname'])) {
             $driverOptions['dbname'] = self::MASTER_DB;

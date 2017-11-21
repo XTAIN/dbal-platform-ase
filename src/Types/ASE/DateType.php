@@ -27,7 +27,11 @@ use Doctrine\DBAL\Types\DateType as DateTypeParent;
 
 /**
  * {@inheritdoc}
- */
+ *
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ * @author  Maximilian Ruta <mr@xtain.net>
+ * @since   2.6
+*/
 class DateType extends DateTypeParent implements PatchedType
 {
     /**

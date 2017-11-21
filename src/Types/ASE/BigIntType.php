@@ -26,7 +26,11 @@ use Doctrine\DBAL\Types\BigIntType as BigIntTypeParent;
 
 /**
  * {@inheritdoc}
- */
+ *
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ * @author  Maximilian Ruta <mr@xtain.net>
+ * @since   2.6
+*/
 class BigIntType extends BigIntTypeParent implements PatchedType
 {
     /**

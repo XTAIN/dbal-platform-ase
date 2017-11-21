@@ -25,7 +25,11 @@ use Doctrine\DBAL\Types\Type;
 
 /**
  * {@inheritdoc}
- */
+ *
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ * @author  Maximilian Ruta <mr@xtain.net>
+ * @since   2.6
+*/
 class TimeImmutableType extends TimeType implements PatchedType
 {
     /**
