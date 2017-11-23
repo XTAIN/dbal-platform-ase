@@ -20,6 +20,7 @@
 namespace Doctrine\DBAL\Driver\ASE;
 
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\EmulatedPreparedStatement;
 use Doctrine\DBAL\Types\Type;
 use PDO;
 use IteratorAggregate;
@@ -31,28 +32,14 @@ use Doctrine\DBAL\Driver\Statement;
  * @since 2.6
  * @author Maximilian Ruta <mr@xtain.net>
  */
-class ASEStatement implements IteratorAggregate, Statement
+class ASEStatement extends EmulatedPreparedStatement implements IteratorAggregate, Statement
 {
-    /**
-     * The ASE Connection object.
-     *
-     * @var ASEConnection
-     */
-    private $connection;
-
     /**
      * The ASE Resource.
      *
      * @var resource
      */
     private $connectionResource;
-
-    /**
-     * The SQL statement to execute.
-     *
-     * @var string
-     */
-    private $sql;
 
     /**
      * The ASE statement resource.
@@ -67,13 +54,6 @@ class ASEStatement implements IteratorAggregate, Statement
      * @var int
      */
     private $stmtAffectedRows;
-
-    /**
-     * Parameters to bind.
-     *
-     * @var array
-     */
-    private $params = array();
 
     /**
      * The name of the default class to instantiate when fetch mode is \PDO::FETCH_CLASS.
@@ -129,34 +109,13 @@ class ASEStatement implements IteratorAggregate, Statement
      */
     public function __construct(ASEConnection $connection, $connectionResource, $sql, ASEMessageHandler $messageHandler, LastInsertId $lastInsertId = null)
     {
-        $this->connection = $connection;
+        parent::__construct($connection, $sql);
         $this->connectionResource = $connectionResource;
-        $this->sql = $sql;
         $this->messageHandler = $messageHandler;
 
         if (stripos($sql, 'INSERT ') === 0) {
             $this->sql .= self::LAST_INSERT_ID_SQL;
             $this->lastInsertId = $lastInsertId;
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function bindValue($param, $value, $type = null)
-    {
-        return $this->bindParam($param, $value, $type, null);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function bindParam($column, &$variable, $type = null, $length = null)
-    {
-        if ($type === \PDO::PARAM_LOB && is_resource($variable)) {
-            $this->params[$column] = array(stream_get_contents($variable), $type);
-        } else {
-            $this->params[$column] = array($variable, $type);
         }
     }
 
@@ -208,55 +167,6 @@ class ASEStatement implements IteratorAggregate, Statement
         }
 
         return false;
-    }
-
-    /**
-     * @param string $sql
-     * @param array $params
-     * @return string
-     */
-    protected function interpolateQuery($sql, $params)
-    {
-        $quotedNamedParams = array();
-        $quotedNumberedParams = array();
-        $patternParts = array();
-        $patternParts[] = preg_quote('?', '/');
-        foreach ($params as $name => $data) {
-            list($value, $type) = $data;
-
-            $value = $this->connection->quote($value, $type);
-
-            if (is_numeric($name)) {
-                $quotedNumberedParams[$name] = $value;
-            } else {
-                $quotedNamedParams[$name] = $value;
-            }
-
-            $patternParts[] = preg_quote($name, '/');
-        }
-
-        $i = 0;
-
-        $sql = preg_replace_callback(
-            '/' . implode('|', $patternParts) . '/',
-            function ($match) use(&$i, $quotedNumberedParams, $quotedNamedParams) {
-                $match = $match[0];
-
-                if ($match == '?') {
-                    $i++;
-                    if (isset($quotedNumberedParams[$i])) {
-                        return $quotedNumberedParams[$i];
-                    }
-                } elseif (isset($quotedNamedParams[$match])) {
-                    return $quotedNamedParams[$match];
-                }
-
-                return $match;
-            },
-            $sql
-        );
-
-        return $sql;
     }
 
     /**

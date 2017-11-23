@@ -19,8 +19,10 @@
 
 namespace Doctrine\DBAL\Driver\PDOASE;
 
+use Doctrine\DBAL\Driver\DbLibPDOEmulatedPreparedStatement;
 use Doctrine\DBAL\Driver\PDOConnection;
 use Doctrine\DBAL\Driver\AbstractDbLibDriver;
+use Doctrine\DBAL\Platforms\ASEPlatform;
 
 /**
  * Sybase ASE Connection implementation.
@@ -47,6 +49,7 @@ class Connection extends PDOConnection implements \Doctrine\DBAL\Driver\Connecti
     {
         parent::__construct($dsn, $user, $password, $options);
         $this->setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('Doctrine\DBAL\Driver\DbLibPDOStatement', array()));
+        $this->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     /**
@@ -66,6 +69,32 @@ class Connection extends PDOConnection implements \Doctrine\DBAL\Driver\Connecti
     public function query()
     {
         return AbstractDbLibDriver::emulateQuery($this, func_get_args());
+    }
+
+    /**
+     * {@inheritDoc}
+     * @license New BSD, code from Zend Framework
+     */
+    public function quote($value, $type=null)
+    {
+        return ASEPlatform::quote($value, $type);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepare($prepareString, $driverOptions = array())
+    {
+        if ($this->getAttribute(\PDO::ATTR_EMULATE_PREPARES)) {
+            if (isset($driverOptions[self::ATTR_STATEMENT_ORIGINAL]) && $driverOptions[self::ATTR_STATEMENT_ORIGINAL]) {
+                unset($driverOptions[self::ATTR_STATEMENT_ORIGINAL]);
+                return parent::prepare($prepareString, $driverOptions);
+            } else {
+                return new DbLibPDOEmulatedPreparedStatement($this, $prepareString, $driverOptions);
+            }
+        } else {
+            return parent::prepare($prepareString, $driverOptions);
+        }
     }
 
     /**
