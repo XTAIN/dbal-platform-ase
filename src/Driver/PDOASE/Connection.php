@@ -38,6 +38,11 @@ class Connection extends PDOConnection implements \Doctrine\DBAL\Driver\Connecti
     protected $class;
 
     /**
+     * @var bool
+     */
+    protected $emulatePrepares = true;
+
+    /**
      * @param string      $dsn
      * @param string|null $user
      * @param string|null $password
@@ -49,7 +54,6 @@ class Connection extends PDOConnection implements \Doctrine\DBAL\Driver\Connecti
     {
         parent::__construct($dsn, $user, $password, $options);
         $this->setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('Doctrine\DBAL\Driver\DbLibPDOStatement', array()));
-        $this->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     /**
@@ -85,7 +89,7 @@ class Connection extends PDOConnection implements \Doctrine\DBAL\Driver\Connecti
      */
     public function prepare($prepareString, $driverOptions = array())
     {
-        if ($this->getAttribute(\PDO::ATTR_EMULATE_PREPARES)) {
+        if ($this->emulatePrepares) {
             if (isset($driverOptions[self::ATTR_STATEMENT_ORIGINAL]) && $driverOptions[self::ATTR_STATEMENT_ORIGINAL]) {
                 unset($driverOptions[self::ATTR_STATEMENT_ORIGINAL]);
                 return parent::prepare($prepareString, $driverOptions);
