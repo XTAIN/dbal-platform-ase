@@ -90,8 +90,8 @@ class Connection extends PDOConnection implements \Doctrine\DBAL\Driver\Connecti
     public function prepare($prepareString, $driverOptions = array())
     {
         if ($this->emulatePrepares) {
-            if (isset($driverOptions[self::ATTR_STATEMENT_ORIGINAL]) && $driverOptions[self::ATTR_STATEMENT_ORIGINAL]) {
-                unset($driverOptions[self::ATTR_STATEMENT_ORIGINAL]);
+            if (isset($driverOptions[DbLibPDOEmulatedPreparedStatement::ATTR_STATEMENT_ORIGINAL]) && $driverOptions[DbLibPDOEmulatedPreparedStatement::ATTR_STATEMENT_ORIGINAL]) {
+                unset($driverOptions[DbLibPDOEmulatedPreparedStatement::ATTR_STATEMENT_ORIGINAL]);
                 return parent::prepare($prepareString, $driverOptions);
             } else {
                 return new DbLibPDOEmulatedPreparedStatement($this, $prepareString, $driverOptions);
