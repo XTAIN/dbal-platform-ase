@@ -7,7 +7,7 @@
     },
     "require": {
         "php": ">=5.3.9",
-        "doctrine/dbal": "2.5.*",
+        "doctrine/dbal": "2.6.*",
         "xtain/dbal-driver-dblib": "~0.9|~1.0"
     }
 }
