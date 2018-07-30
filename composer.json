@@ -1,6 +1,7 @@
 {
     "name": "xtain/dbal-platform-ase",
-    "type": "project",
+    "type": "library",
+    "license": "MIT",
     "description": "Doctrine DBAL platform and driver for ASE",
     "autoload": {
         "classmap": [ "src/" ]
